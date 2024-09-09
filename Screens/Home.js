@@ -30,7 +30,6 @@ const Home = () => {
         const res = await axios.get(URI + "nature&image_type=photo&page" + "=" + page);
         const data = await res.data?.hits;
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        console.log(res);
 
         setImages([...images, ...data]);
         setIsLoading(false);
@@ -41,9 +40,6 @@ const Home = () => {
     };
     fetch();
   }, [page]);
-  console.log(page);
-  console.log(ishasMore);
-  console.log(isLoading);
 
   const handleEndReached = () => {
     if (ishasMore && !isLoading) {
