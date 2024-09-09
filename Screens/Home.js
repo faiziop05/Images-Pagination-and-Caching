@@ -2,6 +2,8 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
+  Platform,
+  SafeAreaView,
   StyleSheet,
   Text,
   View,
@@ -13,6 +15,8 @@ const screenwidth = Dimensions.get("screen").width;
 const screenheight = Dimensions.get("screen").height;
 import { Image as ExpoImage } from "expo-image";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 const Home = () => {
   const API_KEY = "?key=45879582-bc1603d7f0be54f14915d5fbc";
   const URI = "https://pixabay.com/api/" + API_KEY + "&q=";
@@ -22,12 +26,15 @@ const Home = () => {
   const [ishasMore, setIshasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [isScrollingBack, setIsScrollingBack] = useState(false);
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     const fetch = async () => {
       try {
         setIsLoading(true);
-        const res = await axios.get(URI + "nature&image_type=photo&page" + "=" + page);
+        const res = await axios.get(
+          URI + "nature&image_type=photo&page" + "=" + page
+        );
         const data = await res.data?.hits;
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -40,6 +47,7 @@ const Home = () => {
     };
     fetch();
   }, [page]);
+console.log(Math.round(Math.round(insets.top) - Math.round(insets.bottom)));
 
   const handleEndReached = () => {
     if (ishasMore && !isLoading) {
@@ -48,18 +56,17 @@ const Home = () => {
   };
 
   const RenderItem = ({ data }) => {
+    const aspectRatio = data.imageWidth / data.imageHeight;
     return (
       <View style={styles.EachItemWraper}>
-        <View>
-          <ExpoImage
-            width={screenwidth}
-            height={screenheight}
-            source={{
-              uri: data.largeImageURL,
-            }}
-            style={styles.image}
-          />
-        </View>
+        <ExpoImage
+          source={{
+            uri: data.largeImageURL,
+          }}
+          contentFit="contain"
+          style={{aspectRatio:aspectRatio}}
+        />
+
         <View style={styles.UserIconInfoWrapper}>
           {data.userImageURL ? (
             <Image
@@ -87,16 +94,14 @@ const Home = () => {
   };
 
   return (
-    // <SafeAreaView style={{ backgroundColor: "black" }}>
     <View style={styles.container}>
-      <Text>Home</Text>
+        <Text style={styles.Title}>Explore</Text>
       <FlatList
         keyExtractor={(item, index) => index.toString()}
         data={images}
         renderItem={(item) => <RenderItem data={item.item} />}
         onEndReached={handleEndReached}
         onEndReachedThreshold={0.1}
-        pagingEnabled
         onScroll={onScroll}
         initialNumToRender={1}
         maxToRenderPerBatch={1}
@@ -109,7 +114,6 @@ const Home = () => {
         }}
       />
     </View>
-    // </SafeAreaView>
   );
 };
 
@@ -118,21 +122,26 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#000",
+
+  },
+
+  EachItemWraper: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    borderBottomWidth:0.5,
+    borderBottomColor:"#fff4",
+    paddingTop:60
+
   },
   image: {
-    resizeMode: "contain",
     alignSelf: "center",
-  },
-  EachItemWraper: {
-    position: "relative",
+
   },
   UserIconInfoWrapper: {
     display: "flex",
     flexDirection: "row",
-    alignItems: "center",
-    position: "absolute",
-    top: screenheight - 100,
-    left: 20,
+    padding:10
   },
   UerName: {
     marginLeft: 10,
