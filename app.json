@@ -1,27 +1,44 @@
 {
   "expo": {
-    "name": "Photos",
-    "slug": "Photos",
+    "name": "WallCraft",
+    "slug": "WallCraft",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon3.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/icon3.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000000"
     },
+    "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/icon3.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#000000",
+          "imageWidth": 600
+        }
+      ]
+    ],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "foregroundImage": "./assets/adaptive-icon2.png",
+        "backgroundColor": "#000000"
+      },
+      "package": "com.faiziop05.WallCraft"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b7019daf-c533-44ad-9c12-033d13ed3794"
+      }
     }
   }
 }
